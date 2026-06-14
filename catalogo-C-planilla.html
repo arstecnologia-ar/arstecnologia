@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Catálogo · ARS Tecnología</title>
+<meta property="og:title" content="Catálogo en vivo - ARS Tecnología">
+<meta property="og:description" content="Lista de precios actualizada en tiempo real. Módulos, baterías y placas de carga. Martín Gainza 843, Alejandro Korn · 11 2186-1878">
+<meta property="og:image" content="https://arstecnologia-ar.github.io/arstecnologia/logo.png">
+<meta property="og:url" content="https://arstecnologia-ar.github.io/arstecnologia/catalogo.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Catálogo en vivo - ARS Tecnología">
+<meta name="twitter:image" content="https://arstecnologia-ar.github.io/arstecnologia/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&family=Archivo:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  :root{
+    --azul:#0a3d62; --azul2:#13577f; --celeste:#2a7fb8; --cel-bg:#eef6fc;
+    --acento:#ffcf2e; --txt:#0c2733; --linea:#d7e6f1; --linea2:#eaf2f8;
+  }
+  body{background:var(--cel-bg);font-family:Archivo,system-ui,sans-serif;color:var(--txt);padding-bottom:80px}
+  .loading{position:fixed;inset:0;background:var(--azul);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;z-index:999}
+  .spinner{width:36px;height:36px;border:3px solid rgba(255,255,255,.25);border-top-color:var(--acento);border-radius:50%;animation:spin .8s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .wrap{max-width:900px;margin:0 auto;background:#fff;min-height:100vh;box-shadow:0 0 40px rgba(10,61,98,.08)}
+
+  /* Cabecera planilla */
+  .head{background:var(--azul);padding:14px 16px;display:flex;align-items:center;gap:13px}
+  .head img{height:46px;width:auto;background:#fff;border-radius:9px;padding:7px}
+  .head .t{flex:1;min-width:0}
+  .head .t b{display:block;font-size:16px;font-weight:800;color:#fff;letter-spacing:.3px}
+  .head .t span{font-size:9.5px;color:#9fcdec;letter-spacing:2.5px;font-weight:600}
+  .head .acts{display:flex;gap:7px}
+  .head .acts a{display:flex;align-items:center;gap:5px;text-decoration:none;font-size:11.5px;font-weight:700;padding:8px 11px;border-radius:8px}
+  .a-wsp{background:#1d9e75;color:#fff}
+  .a-loc{background:rgba(255,255,255,.1);color:#dcebff;color:#cfe6f7;border:1px solid rgba(255,255,255,.18)}
+
+  .bar{position:sticky;top:0;z-index:60;background:#fff;border-bottom:1px solid var(--linea)}
+  .search-wrap{padding:10px 14px 0}
+  .search{width:100%;background:var(--cel-bg);border:1.5px solid var(--linea);border-radius:10px;padding:11px 14px;font-family:Roboto Mono,monospace;font-size:14px;color:var(--txt);outline:none}
+  .search:focus{border-color:var(--celeste);background:#fff}
+  .tabs{display:flex;gap:0;padding:9px 14px 0;overflow-x:auto}
+  .tab{flex-shrink:0;background:none;border:none;border-bottom:3px solid transparent;padding:8px 13px 9px;font-family:Archivo;font-size:12.5px;font-weight:700;color:#6b91a8;cursor:pointer;white-space:nowrap;letter-spacing:.3px}
+  .tab.on{color:var(--azul);border-bottom-color:var(--acento)}
+  .live{display:flex;align-items:center;gap:6px;padding:7px 14px 9px;font-family:Roboto Mono,monospace;font-size:9.5px;font-weight:600;color:#6b91a8;letter-spacing:1px}
+  .dot{width:6px;height:6px;border-radius:50%;background:#2ecc71;animation:pulse 1.5s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+  .content{padding:0}
+
+  /* Banda de categoría */
+  .cat-band{padding:12px 16px 7px;display:flex;align-items:center;gap:9px;background:#fff}
+  .cat-band .sq{width:11px;height:11px;border-radius:3px}
+  .cat-band h2{font-family:Archivo;font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--azul)}
+  .cat-band .ln{flex:1;height:1px;background:var(--linea)}
+
+  /* Encabezado de marca pegajoso */
+  .marca-h{position:sticky;top:117px;z-index:40;display:flex;align-items:center;background:var(--azul);padding:7px 16px;border-left:4px solid var(--acento)}
+  .marca-h .mn{font-family:Roboto Mono,monospace;font-size:12px;font-weight:700;color:#fff;letter-spacing:2.5px}
+  .marca-h .mc{margin-left:auto;font-family:Roboto Mono,monospace;font-size:10px;color:#9fcdec}
+
+  /* Tabla densa 2 columnas */
+  .tcols{display:flex}
+  .tcol{flex:1;min-width:0}
+  .tcol+.tcol{border-left:1px solid var(--linea)}
+  .colhead{display:flex;background:var(--linea2);padding:5px 12px;font-family:Archivo;font-size:8.5px;font-weight:700;color:#7a98ab;letter-spacing:1px}
+  .colhead .h1{flex:1}
+  .colhead .h2{width:46px;text-align:center}
+  .colhead .h3{width:82px;text-align:right}
+  .row{display:flex;align-items:center;padding:8px 12px;border-bottom:1px solid var(--linea2);cursor:pointer;transition:.1s}
+  .row:active{background:var(--cel-bg)}
+  .row .n{flex:1;min-width:0;font-family:Roboto Mono,monospace;font-size:12px;font-weight:500;line-height:1.28;word-break:break-word}
+  .row .m{width:46px;text-align:center;flex-shrink:0}
+  .row .p{width:82px;text-align:right;flex-shrink:0;font-family:Roboto Mono,monospace;font-size:12px;font-weight:700;color:var(--azul);font-variant-numeric:tabular-nums}
+  .row.alt{background:#fafcfe}
+  .row.of{background:#fffbe3}
+  .row.cm{background:#fff3e0}
+  .row.incart{background:#e9f8f0}
+  .row.ag{opacity:.5;cursor:default}
+  .row.ag:active{background:none}
+  .t-of{display:inline-block;background:var(--acento);color:#3a2e00;font-family:Archivo;font-size:7px;font-weight:800;padding:2px 5px;border-radius:3px}
+  .t-cm{display:inline-block;background:#9a4d00;color:#fff;font-family:Archivo;font-size:7px;font-weight:800;padding:2px 5px;border-radius:3px}
+  .qty{display:inline-flex;align-items:center;justify-content:center;min-width:17px;height:17px;background:#1d9e75;color:#fff;font-family:Archivo;font-size:10px;font-weight:800;border-radius:9px;padding:0 5px;margin-left:5px;vertical-align:middle}
+  .ss{color:#c0392b;font-weight:700;font-size:11px}
+
+  .empty{text-align:center;padding:60px 20px;color:#5a7689;font-size:14px}
+  .foot{text-align:center;padding:20px;color:#6b91a8;font-family:Roboto Mono,monospace;font-size:10px}
+
+  /* Carrito */
+  .cart-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:900px;background:#1d9e75;color:#fff;display:none;align-items:center;justify-content:space-between;padding:14px 20px;font-family:Archivo;font-weight:700;cursor:pointer;z-index:200;box-shadow:0 -4px 20px rgba(0,0,0,.25)}
+  .cart-bar .cc{display:flex;align-items:center;gap:9px}
+  .cart-bar .badge{background:#fff;color:#1d9e75;min-width:21px;height:21px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:12px}
+  .cart-panel{position:fixed;bottom:0;left:50%;transform:translateX(-50%) translateY(100%);width:100%;max-width:900px;background:#fff;z-index:210;border-radius:16px 16px 0 0;transition:transform .25s;max-height:78vh;display:flex;flex-direction:column;box-shadow:0 -8px 30px rgba(0,0,0,.3)}
+  .cart-panel.open{transform:translateX(-50%) translateY(0)}
+  .cart-head{display:flex;justify-content:space-between;align-items:center;padding:17px 20px 12px;border-bottom:1px solid #eef2f5}
+  .cart-head b{font-size:15px}
+  .cart-vaciar{background:none;border:none;color:#c0392b;font-size:12px;font-weight:700;cursor:pointer}
+  .cart-items{overflow-y:auto;padding:8px 16px}
+  .cart-item{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid #f3f3f3}
+  .ci-name{flex:1;font-family:Roboto Mono,monospace;font-size:12.5px;font-weight:500;line-height:1.3}
+  .ci-sub{font-size:11px;color:#888;margin-top:2px}
+  .ci-qty{display:flex;align-items:center;gap:9px}
+  .ci-qty button{width:28px;height:28px;border:1px solid var(--linea);background:var(--cel-bg);border-radius:7px;font-size:17px;font-weight:700;color:var(--azul);cursor:pointer}
+  .ci-qty span{min-width:18px;text-align:center;font-weight:700;font-size:14px}
+  .ci-sub-total{font-family:Roboto Mono,monospace;font-weight:700;font-size:13px;min-width:72px;text-align:right}
+  .ci-del{background:none;border:none;color:#bbb;font-size:14px;cursor:pointer;padding:4px}
+  .cart-foot{padding:16px 20px;border-top:1px solid #eef2f5;display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .cart-foot-total{font-size:14px}
+  .cart-foot-total strong{font-family:Roboto Mono,monospace;font-size:18px;color:var(--azul)}
+  .cart-wsp{display:inline-flex;align-items:center;gap:8px;background:#1d9e75;color:#fff;border:none;border-radius:11px;padding:14px 20px;font-family:Archivo;font-size:14px;font-weight:700;cursor:pointer}
+</style>
+</head>
+<body>
+
+<div class="loading" id="loading">
+  <div class="spinner"></div>
+  <div style="color:var(--acento);font-family:'Roboto Mono',monospace;font-size:11px;letter-spacing:2px">CARGANDO LISTA…</div>
+</div>
+
+<div class="wrap">
+  <div class="head">
+    <img src="logo.png" alt="ARS Tecnología" onerror="this.style.display='none'">
+    <div class="t"><b>ARS Tecnología</b><span>LISTA DE PRECIOS</span></div>
+    <div class="acts">
+      <a class="a-wsp" href="https://wa.me/5491121861878" target="_blank" rel="noopener">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2z"/></svg>
+        WhatsApp
+      </a>
+      <a class="a-loc" href="https://maps.google.com/?q=Mart%C3%ADn+Gainza+843+Alejandro+Korn" target="_blank" rel="noopener">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="#ff6b6b"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>
+        Local
+      </a>
+    </div>
+  </div>
+
+  <div class="bar">
+    <div class="search-wrap"><input type="text" class="search" id="search" placeholder="🔍 Buscar modelo, marca o repuesto…"></div>
+    <div class="tabs" id="tabs">
+      <button class="tab on" data-cat="todos" onclick="setCategoria('todos',this)">TODOS</button>
+      <button class="tab" data-cat="Módulo" onclick="setCategoria('Módulo',this)">MÓDULOS</button>
+      <button class="tab" data-cat="Batería" onclick="setCategoria('Batería',this)">BATERÍAS</button>
+      <button class="tab" data-cat="Placa de Carga" onclick="setCategoria('Placa de Carga',this)">PLACAS DE CARGA</button>
+    </div>
+    <div class="live"><span class="dot"></span>ACTUALIZADO EN TIEMPO REAL · TOCÁ UN ÍTEM PARA AGREGARLO</div>
+  </div>
+
+  <div class="content" id="content"></div>
+  <div class="foot">ARS Tecnología · Martín Gainza 843, Alejandro Korn · 11 2186-1878</div>
+</div>
+
+<div class="cart-panel" id="cart-panel">
+  <div class="cart-head"><b>Tu pedido</b><button class="cart-vaciar" onclick="vaciarCarrito()">Vaciar</button></div>
+  <div class="cart-items" id="cart-items"></div>
+  <div class="cart-foot">
+    <div class="cart-foot-total">Total <strong id="panel-total">$ 0</strong></div>
+    <button class="cart-wsp" onclick="enviarWhatsApp()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2z"/></svg>
+      Enviar por WhatsApp
+    </button>
+  </div>
+</div>
+<div class="cart-bar" id="cart-bar" onclick="toggleCarrito()">
+  <div class="cc"><span class="badge" id="cart-count">0</span><span>Ver pedido</span></div>
+  <span id="cart-total">$ 0</span>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD8YdOB_FVf6oSyFCWlzKepNSq46OEGU38",
+  authDomain: "arstecnologia.firebaseapp.com",
+  projectId: "arstecnologia",
+  storageBucket: "arstecnologia.firebasestorage.app",
+  messagingSenderId: "995023045742",
+  appId: "1:995023045742:web:34dabb6d439e2f68add27f"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+var PRODUCTOS=[], filtro='', categoriaActiva='todos';
+var cats=['Módulo','Batería','Placa de Carga'];
+var nombres={'Módulo':'Módulos','Batería':'Baterías','Placa de Carga':'Placas de carga'};
+var catColor={'Módulo':'#7cb342','Batería':'#e63946','Placa de Carga':'#1e6fff'};
+var ORDEN_FIJO={'samsung':1,'motorola':2,'iphone':3,'apple':3,'xiaomi':4,'tcl':5,'lg':6};
+function getOrdenMarca(marca,productos){
+  var m=marca.toLowerCase().trim();
+  for(var key in ORDEN_FIJO){ if(m.indexOf(key)>=0) return ORDEN_FIJO[key]; }
+  var ov=productos.map(function(p){return p.orden||0;}).filter(function(o){return o>0;});
+  if(ov.length>0) return 100+Math.min.apply(null,ov);
+  return 9999;
+}
+function fmt(n){ return '$ '+Number(n||0).toLocaleString('es-AR'); }
+
+var CART={}, WSP_NUMERO='5491121861878';
+function cartId(p){ return (p.categoria||'')+'|'+(p.modelo||'')+'|'+(p.nombre||''); }
+function addToCart(id){
+  var p=PRODUCTOS.find(function(x){return cartId(x)===id;});
+  if(!p||p.stock===0) return;
+  if(CART[id]) CART[id].cant++; else CART[id]={nombre:p.nombre,precio:p.precio,cant:1};
+  renderCarrito(); render();
+}
+window.cambiarCant=function(id,d){ if(!CART[id])return; CART[id].cant+=d; if(CART[id].cant<=0)delete CART[id]; renderCarrito(); render(); };
+window.quitarItem=function(id){ delete CART[id]; renderCarrito(); render(); };
+window.vaciarCarrito=function(){ CART={}; renderCarrito(); render(); };
+function totalCarrito(){ var t=0,n=0; for(var id in CART){ t+=CART[id].precio*CART[id].cant; n+=CART[id].cant; } return {total:t,unidades:n}; }
+function renderCarrito(){
+  var bar=document.getElementById('cart-bar'), panel=document.getElementById('cart-panel'), t=totalCarrito();
+  if(t.unidades===0){ bar.style.display='none'; panel.classList.remove('open'); return; }
+  bar.style.display='flex';
+  document.getElementById('cart-count').textContent=t.unidades;
+  document.getElementById('cart-total').textContent=fmt(t.total);
+  var items='';
+  for(var id in CART){ var it=CART[id]; var sid=id.replace(/'/g,"\\'");
+    items+='<div class="cart-item"><div class="ci-name">'+it.nombre+'<div class="ci-sub">'+fmt(it.precio)+' c/u</div></div>'+
+    '<div class="ci-qty"><button onclick="cambiarCant(\''+sid+'\',-1)">−</button><span>'+it.cant+'</span><button onclick="cambiarCant(\''+sid+'\',1)">+</button></div>'+
+    '<div class="ci-sub-total">'+fmt(it.precio*it.cant)+'</div><button class="ci-del" onclick="quitarItem(\''+sid+'\')">✕</button></div>';
+  }
+  document.getElementById('cart-items').innerHTML=items;
+  document.getElementById('panel-total').textContent=fmt(t.total);
+}
+window.toggleCarrito=function(){ document.getElementById('cart-panel').classList.toggle('open'); };
+window.enviarWhatsApp=function(){
+  var t=totalCarrito(); if(t.unidades===0) return;
+  var msg='*PEDIDO - ARS Tecnología*\n\n';
+  for(var id in CART){ var it=CART[id]; msg+='• '+it.cant+'x '+it.nombre+' — '+fmt(it.precio*it.cant)+'\n'; }
+  msg+='\n*Total: '+fmt(t.total)+'* ('+t.unidades+' u.)\n\nHola! Quiero hacer este pedido.';
+  window.open('https://wa.me/'+WSP_NUMERO+'?text='+encodeURIComponent(msg),'_blank');
+};
+
+function filaHTML(p,alt){
+  var ag=p.stock===0, of=!!p.oferta&&!ag, cm=!!p.marco&&!ag;
+  var id=cartId(p), inc=CART[id];
+  var cls='row'+(alt?' alt':'')+(ag?' ag':'')+(of?' of':'')+(cm?' cm':'')+(inc?' incart':'');
+  var mid=''; if(of) mid+='<span class="t-of">OF</span>'; if(cm) mid+=(of?' ':'')+'<span class="t-cm">C/M</span>';
+  var qty=inc?'<span class="qty">'+inc.cant+'</span>':'';
+  var precio=ag?'<span class="ss">S/STOCK</span>':fmt(p.precio);
+  return '<div class="'+cls+'"'+(ag?'':' data-pid="'+id+'"')+'><div class="n">'+(p.nombre||'')+qty+'</div><div class="m">'+mid+'</div><div class="p">'+precio+'</div></div>';
+}
+
+function render(){
+  var cont=document.getElementById('content'), f=filtro.toLowerCase().trim();
+  var html='', hayAlgo=false;
+  var dosColumnas = window.innerWidth >= 620;
+  cats.forEach(function(cat){
+    if(categoriaActiva!=='todos' && cat!==categoriaActiva) return;
+    var prodsCat=PRODUCTOS.filter(function(p){
+      if(p.categoria!==cat) return false;
+      if(!f) return true;
+      return (p.nombre||'').toLowerCase().indexOf(f)>=0 || (p.modelo||'').toLowerCase().indexOf(f)>=0;
+    });
+    if(prodsCat.length===0) return;
+    hayAlgo=true;
+    var grupos={};
+    prodsCat.forEach(function(p){ var m=(p.modelo||'Sin marca').trim(); if(!grupos[m])grupos[m]=[]; grupos[m].push(p); });
+    var marcas=Object.keys(grupos).sort(function(a,b){
+      var oa=getOrdenMarca(a,grupos[a]), ob=getOrdenMarca(b,grupos[b]);
+      if(oa!==ob) return oa-ob; return a.localeCompare(b,'es');
+    });
+    html+='<div class="cat-band"><span class="sq" style="background:'+catColor[cat]+'"></span><h2>'+nombres[cat]+'</h2><span class="ln"></span></div>';
+    marcas.forEach(function(marca){
+      var arr=grupos[marca].sort(function(a,b){return a.nombre.localeCompare(b.nombre,'es');});
+      html+='<div class="marca-h"><span class="mn">'+marca.toUpperCase()+'</span><span class="mc">'+arr.length+' ítems</span></div>';
+      var ch='<div class="colhead"><span class="h1">PRODUCTO</span><span class="h2"></span><span class="h3">PRECIO</span></div>';
+      if(dosColumnas){
+        var mitad=Math.ceil(arr.length/2), c1=arr.slice(0,mitad), c2=arr.slice(mitad);
+        html+='<div class="tcols"><div class="tcol">'+ch+c1.map(function(p,i){return filaHTML(p,i%2===1);}).join('')+'</div>';
+        html+='<div class="tcol">'+ch+(c2.length?c2.map(function(p,i){return filaHTML(p,i%2===1);}).join(''):'')+'</div></div>';
+      } else {
+        html+='<div class="tcol">'+ch+arr.map(function(p,i){return filaHTML(p,i%2===1);}).join('')+'</div>';
+      }
+    });
+  });
+  if(!hayAlgo) html='<div class="empty">'+(f?'No se encontraron productos con "'+filtro+'"':'No hay productos en esta categoría')+'</div>';
+  cont.innerHTML=html;
+}
+document.getElementById('search').addEventListener('input',function(e){ filtro=e.target.value; render(); });
+document.getElementById('content').addEventListener('click',function(e){
+  var row=e.target.closest('.row[data-pid]');
+  if(row && row.dataset.pid) addToCart(row.dataset.pid);
+});
+window.setCategoria=function(cat,btn){
+  categoriaActiva=cat;
+  document.querySelectorAll('.tab').forEach(function(b){b.classList.remove('on');});
+  btn.classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+  render();
+};
+window.addEventListener('resize',render);
+onSnapshot(doc(db,'arstecnologia','datos'),function(snap){
+  document.getElementById('loading').style.display='none';
+  if(snap.exists()){ var d=snap.data(); PRODUCTOS=(d.productos||[]).filter(function(p){return cats.indexOf(p.categoria)>=0;}); }
+  else PRODUCTOS=[];
+  render();
+},function(err){
+  document.getElementById('loading').style.display='none';
+  document.getElementById('content').innerHTML='<div class="empty">Error: '+err.message+'</div>';
+});
+</script>
+</body>
+</html>
